@@ -48,7 +48,9 @@ function config() {
   const p = props() ?? {};
   const d = p.dialog ?? {};
   return {
-    machine: d.machine ?? p.machine ?? shared("hermes-kanban.machine") ?? "hermes",
+    // Local default: this host's paired djed machine is named "anton-2" (2026-11-11);
+    // props().machine / shared("hermes-kanban.machine") still override it.
+    machine: d.machine ?? p.machine ?? shared("hermes-kanban.machine") ?? "anton-2",
     board: d.board ?? p.board ?? shared("hermes-kanban.board") ?? null,
   };
 }
