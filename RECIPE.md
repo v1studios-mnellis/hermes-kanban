@@ -37,7 +37,9 @@ the first 600 characters of the body.
 
 Above the columns, a 32 px bar on `chrome` reads "Hermes Kanban", then
 "board default" or "board <slug>", then the machine name, then the total card
-count; at its right an `offline` chip when something is wrong, a `refresh`
+count with any non-empty folded columns in parentheses (e.g. `· 669 cards (567
+done, 102 archived folded)`), so a loaded board is visible even when the open
+columns are empty; at its right an `offline` chip when something is wrong, a `refresh`
 button ("loading…" while a fetch runs, a `hover` background under the pointer),
 and a `+ New` button in `solid`/`solid_foreground`.
 

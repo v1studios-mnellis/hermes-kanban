@@ -588,6 +588,9 @@ export default class HermesKanban extends View {
     const by = new Map(STATUSES.map((s) => [s, []]));
     for (const task of this.tasks) (by.get(task.status) ?? by.get("todo")).push(task);
     const problem = this.offline ?? this.machineNote;
+    const foldedCounts = STATUSES.filter((s) => this.folded.has(s) && (by.get(s)?.length ?? 0) > 0)
+      .map((s) => `${by.get(s).length} ${s}`).join(", ");
+    const countText = `· ${this.tasks.length} ${this.tasks.length === 1 ? "card" : "cards"}${foldedCounts ? ` (${foldedCounts} folded)` : ""}`;
 
     return v_flex()
       .id("kb-root")
@@ -610,7 +613,7 @@ export default class HermesKanban extends View {
           .child(div().text_size(12.5).font_semibold().child("Hermes Kanban"))
           .child(div().text_size(11).text_color(t.dim).child(this.cfg.board ? `board ${this.cfg.board}` : "board default"))
           .child(div().text_size(11).text_color(t.dim).child(`· ${this.cfg.machine}`))
-          .when(this.tasks.length > 0, (el) => el.child(div().text_size(11).text_color(t.dim).child(`· ${this.tasks.length} ${this.tasks.length === 1 ? "card" : "cards"}`)))
+          .when(this.tasks.length > 0, (el) => el.child(div().text_size(11).text_color(t.dim).child(countText)))
           .child(div().flex_1())
           .when(Boolean(problem), (el) =>
             el.child(div().px(6).h(19).flex().items_center().rounded(5).bg(t.blocked + "22").text_color(t.blocked).text_size(10.5).child("offline")))
