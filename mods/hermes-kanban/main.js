@@ -71,7 +71,7 @@ export default class HermesKanban extends View {
       this.detail = null;
       this.detailError = null;
       this.stamp = shared(STAMP) ?? 0;
-      this.buildForm();
+      if (dialog.mode !== "detail") this.buildForm();
       if (dialog.mode === "detail") {
         this.commentIn = TextareaState.new({ placeholder: "Comment on this card", rows: 3 });
         this.loadDetail(cx, dialog.id);
@@ -121,8 +121,8 @@ export default class HermesKanban extends View {
 
   // The last snapshot, so a new copy or a reload shows the board at once.
   restore() {
-    const cache = store.get("cache", null);
-    if (!cache || cache.board !== this.cfg.board || cache.machine !== this.cfg.machine) return;
+    const cache = store.get(`cache:${this.cfg.machine}:${this.cfg.board ?? ""}`, null);
+    if (!cache) return;
     this.tasks = Array.isArray(cache.tasks) ? cache.tasks : [];
     this.loaded = cache.at ?? 0;
   }
@@ -143,8 +143,8 @@ export default class HermesKanban extends View {
         this.error = null;
         this.notice = null;
         // Bodies are long; the tooltip shows 600 characters and the dialog reads `show`.
-        store.set("cache", {
-          at: this.loaded, board, machine,
+        store.set(`cache:${machine}:${board ?? ""}`, {
+          at: this.loaded,
           tasks: this.tasks.map((t) => ({ ...t, body: t.body.slice(0, 600) })),
         });
       } catch (e) {
@@ -162,13 +162,17 @@ export default class HermesKanban extends View {
     cx.spawn(async (cx) => {
       try {
         const r = await hc(["machine", "ls", "--json"]);
-        const machines = r.code === 0 ? (JSON.parse(r.stdout).machines ?? []) : [];
-        const machine = machines.find((m) => m.name === name);
-        this.machineNote = !machine
-          ? `No machine "${name}" in hc machine ls.`
-          : machine.state !== "connected"
-            ? `Machine "${name}" is ${machine.state}.`
-            : null;
+        if (r.code !== 0) {
+          this.machineNote = `hc machine ls failed (exit ${r.code}).`;
+        } else {
+          const machines = JSON.parse(r.stdout).machines ?? [];
+          const machine = machines.find((m) => m.name === name);
+          this.machineNote = !machine
+            ? `No machine "${name}" in hc machine ls.`
+            : machine.state !== "connected"
+              ? `Machine "${name}" is ${machine.state}.`
+              : null;
+        }
       } catch {
         // The next list fetch says what is wrong with the machine.
       }

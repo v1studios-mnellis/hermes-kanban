@@ -96,7 +96,7 @@ two buttons. Errors show in `blocked` just above the buttons.
 - Writes, all through the CLI: `create <title> [--body] [--assignee]
   [--priority]`, `edit <id> [--title] [--body] [--priority]`,
   `comment <id> <text>`, `assign <id> <profile|none>`, then the moves that fit
-  the card's status: `promote` (triage, todo), `block <id> [reason]`,
+  the card's status: `promote <id>` (todo — the CLI's todo/blocked → ready recovery path), `block <id> [reason]`,
   `schedule <id>`, `unblock <id>` (blocked, scheduled), `complete <id>`
   (ready, running, review), `request-review <id>` (running),
   `request-changes <id> <reason>` and `reopen-review <id>` (review), and
@@ -172,9 +172,9 @@ state it reads or writes: `hermes-kanban.machine`, `hermes-kanban.board`,
   a token and removed by the first copy that hears `hermes-kanban.do:<token>`.
   Copying the gitview discard pattern matters here; running from a plain
   `shared` flag would archive twice.
-- `edit` cannot clear a body: the dialog only sends `--body` when the field is
-  non-empty, because `--body ""` is not the same as "leave it". Title and
-  priority are always sent when non-empty.
+- `edit` cannot clear a field: the dialog only sends `--title`/`--body`/
+  `--priority` when the field is non-empty, so an emptied field leaves the old
+  value (the CLI has no clear flag for them).
 - `complete` on a blocked card is refused by the CLI; the dialog only offers
   the moves `MOVES` lists for the card's current status, so no button sends a
   known-bad combination. Any other refusal is shown in the dialog in `blocked`

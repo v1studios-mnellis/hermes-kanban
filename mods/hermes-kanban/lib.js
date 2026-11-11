@@ -23,7 +23,8 @@ export const TONE = {
 // What each status can move to, as `[label, command, tone, reason?]`. Every
 // move the CLI has is listed here; `reason` asks for the note the CLI wants.
 export const MOVES = {
-  triage: [["Promote", "promote"], ["Block", "block", "danger", true], ["Schedule", "schedule"]],
+  // `promote` is the CLI's recovery path for todo/blocked → ready; triage has no promote.
+  triage: [["Block", "block", "danger", true], ["Schedule", "schedule"]],
   todo: [["Promote", "promote"], ["Block", "block", "danger", true], ["Schedule", "schedule"]],
   scheduled: [["Unblock", "unblock"], ["Block", "block", "danger", true]],
   ready: [["Block", "block", "danger", true], ["Schedule", "schedule"], ["Complete", "complete"]],
