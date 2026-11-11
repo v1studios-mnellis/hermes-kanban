@@ -44,8 +44,9 @@ and a `+ New` button in `solid`/`solid_foreground`.
 Under the bar, when a fetch fails or the machine is missing, one line on a
 `blocked` tint: `Can't reach <machine>: <error> — retrying every 10s.`, with
 the offline chip in the bar. Cached cards stay on the board. A write the board made itself (from its
-keys) shows `<command> <id> done` in `done` green until the next tick, and a
-write that fails shows its error in the same line.
+keys) shows `<command> <id> done` in `done` green until the next write, and a
+failed write shows its error on its own `blocked`-red line under the bar until
+the next write.
 
 The card dialog is 62% by 84% of the window on `popover`. Its first line is the
 full task id, a status chip tinted like the column, `→ assignee`, `created
@@ -178,7 +179,7 @@ state it reads or writes: `hermes-kanban.machine`, `hermes-kanban.board`,
 - `complete` on a blocked card is refused by the CLI; the dialog only offers
   the moves `MOVES` lists for the card's current status, so no button sends a
   known-bad combination. Any other refusal is shown in the dialog in `blocked`
-  red and in the board's offline line if the board made the write.
+  red, and in the board's own error line if the board made the write.
 - The board is read-only about work: it never runs `claim`, `dispatch`,
   `daemon` or `watch`. A card moved to `ready` is fair game for the Hermes
   dispatcher, which may start a worker; that is the board's normal behavior,
