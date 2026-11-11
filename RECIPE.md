@@ -24,8 +24,8 @@ theme: `triage` `ansi5`, `todo` `ansi4`, `scheduled` `ansi6`, `ready` `ansi2`,
 `running` `working`, `blocked` `blocked`, `review` `ansi3`, `done` `done`,
 `archived` `dim`. An empty column says "nothing here" in `dim`.
 
-`done` and `archived` start folded: their header shows the count and `▸`, and
-their cards are not drawn. Every other column starts open.
+All nine columns start open (cards drawn). Click a header to fold it: a folded
+header keeps the count and shows `▸` instead of `▾`, and its cards are not drawn.
 
 A card shows three lines: the short id (`t_06bef1dc` → `06bef1`, `dim`, 10 px)
 with a `p<priority>` chip in the status color when the priority is above zero
@@ -91,8 +91,9 @@ two buttons. Errors show in `blocked` just above the buttons.
 - Board: `props().board`, else `shared("hermes-kanban.board")`, else the
   default board. It is passed as `hermes kanban --board <slug> <sub> …`.
 - Columns: click a header to fold or unfold it; the folded set is kept in
-  `localStorage` under `folded`. `props().folded` is an array of statuses to
-  start folded, for a layout that wants a different view.
+  `localStorage` under `folded-v2` (the `-v2` key exists so copies saved under
+  the old default `["done","archived"]` start unfolded). `props().folded` is an
+  array of statuses to start folded, for a layout that wants a different view.
 - Cards: a click opens the card dialog. Cards are ordered as the CLI returns
   them (priority by default). A column draws at most its first 100 cards and
   then a `+N more` line in `dim`.
@@ -206,8 +207,9 @@ state it reads or writes: `hermes-kanban.machine`, `hermes-kanban.board`,
 - `herdr-app do pane.split --direction right --mod hermes-kanban` shows the
   nine columns, and each column's count equals that status's count in
   `ssh anton-djed 'hermes kanban list --json --archived'` (669 cards, 567
-  `done`, 102 `archived` on the default board when this was written). Click
-  `done`'s header and the cards appear.
+  `done`, 102 `archived` on the default board when this was written). The
+  `done` column lists its first 100 cards plus a `+N more` line; click its
+  header to fold it.
 - Clicking a card shows its body, comments and events, matching
   `hermes kanban show <id> --json` (`.task`, `.comments`, `.events`).
 - `+ New` creates a card: it is in `hermes kanban list --json` and in its

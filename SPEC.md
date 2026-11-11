@@ -13,9 +13,9 @@ herdr-0.9.5 plugin as the day-to-day board view.
 
 ## Requirements
 - **R1 — Board pane.** One column per kanban status, canonical order `triage,
-  todo, scheduled, ready, running, blocked, review, done, archived`;
-  `done`/`archived` collapsed by default. Cards show id, title, assignee and
-  age. The mod opens as a pane (`pane.split {mod: "hermes-kanban"}`) and via
+  todo, scheduled, ready, running, blocked, review, done, archived`; all
+  columns unfolded by default (changed 2026-11-11: the board looked empty when
+  only done/archived held cards). Cards show id, title, assignee and age. The mod opens as a pane (`pane.split {mod: "hermes-kanban"}`) and via
   `mod.open {name: "hermes-kanban"}`. `mod.json`: `place: "none"`,
   `focusable: true`, title "Hermes Kanban"; an optional key binding (suggest
   `ctrl-alt-b`, the old plugin's spirit) ships in the mod's `keys.json`.

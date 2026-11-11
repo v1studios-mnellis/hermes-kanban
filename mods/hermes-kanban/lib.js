@@ -5,7 +5,7 @@
 export const STATUSES = [
   "triage", "todo", "scheduled", "ready", "running", "blocked", "review", "done", "archived",
 ];
-export const FOLDED_BY_DEFAULT = ["done", "archived"];
+export const FOLDED_BY_DEFAULT = []; // all columns start unfolded
 
 // One theme color per status; `theme()` names them.
 export const TONE = {

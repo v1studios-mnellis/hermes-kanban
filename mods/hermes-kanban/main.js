@@ -88,7 +88,9 @@ export default class HermesKanban extends View {
       return;
     }
 
-    const folded = props()?.folded ?? store.get("folded", FOLDED_BY_DEFAULT);
+    // "folded-v2": the v1 key held the old default ["done","archived"]; a fresh
+    // key makes existing copies start unfolded with the new default.
+    const folded = props()?.folded ?? store.get("folded-v2", FOLDED_BY_DEFAULT);
     this.folded = new Set(Array.isArray(folded) ? folded : FOLDED_BY_DEFAULT);
     this.tasks = [];
     this.loaded = 0;
@@ -259,7 +261,7 @@ export default class HermesKanban extends View {
   toggle(status, cx) {
     if (this.folded.has(status)) this.folded.delete(status);
     else this.folded.add(status);
-    store.set("folded", [...this.folded]);
+    store.set("folded-v2", [...this.folded]);
     cx.notify();
   }
 
