@@ -110,8 +110,10 @@ export default class HermesKanban extends View {
     cx.timer.every(60000, (cx) => this.checkMachine(cx));
     cx.spawn(async (cx) => {
       for (;;) {
-        const command = await nextCommand();
-        this.command(command, cx);
+        try {
+          const command = await nextCommand();
+          this.command(command, cx);
+        } catch {}
         cx.notify();
       }
     });
@@ -174,7 +176,7 @@ export default class HermesKanban extends View {
               : null;
         }
       } catch {
-        // The next list fetch says what is wrong with the machine.
+        this.machineNote = "hc machine ls returned unreadable output.";
       }
       cx.notify();
     });
@@ -585,7 +587,7 @@ export default class HermesKanban extends View {
     const now = Date.now() / 1000;
     const by = new Map(STATUSES.map((s) => [s, []]));
     for (const task of this.tasks) (by.get(task.status) ?? by.get("todo")).push(task);
-    const problem = this.offline ?? this.error ?? this.machineNote;
+    const problem = this.offline ?? this.machineNote;
 
     return v_flex()
       .id("kb-root")
@@ -629,7 +631,9 @@ export default class HermesKanban extends View {
             .child(div().flex_1().min_w(0).truncate().text_size(11.5).text_color(t.blocked)
               .child(`Can't reach ${this.cfg.machine}: ${problem} — retrying every ${duration(TICK)}.`)),
         ))
-      .when(Boolean(this.notice) && !problem, (el) =>
+      .when(Boolean(this.error), (el) =>
+        el.child(div().flex_none().px(10).py(4).text_size(11).text_color(t.blocked).border_b(1).border_color(t.border).child(this.error)))
+      .when(Boolean(this.notice), (el) =>
         el.child(div().flex_none().px(10).py(4).text_size(11).text_color(t.done).border_b(1).border_color(t.border).child(this.notice)))
       .child(
         h_flex().id("kb-columns").flex_1().min_h(0).p(COL_PAD).gap(COL_GAP).overflow_x_scrollbar()
