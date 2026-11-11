@@ -44,9 +44,9 @@ and a `+ New` button in `solid`/`solid_foreground`.
 Under the bar, when a fetch fails or the machine is missing, one line on a
 `blocked` tint: `Can't reach <machine>: <error> — retrying every 10s.`, with
 the offline chip in the bar. Cached cards stay on the board. A write the board made itself (from its
-keys) shows `<command> <id> done` in `done` green until the next write, and a
-failed write shows its error on its own `blocked`-red line under the bar until
-the next write.
+keys) shows `<command> <id> done` in `done` green until the next tick (≤10 s),
+and a failed write shows its error on its own `blocked`-red line under the bar
+until the next write.
 
 The card dialog is 62% by 84% of the window on `popover`. Its first line is the
 full task id, a status chip tinted like the column, `→ assignee`, `created

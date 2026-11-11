@@ -143,7 +143,7 @@ export default class HermesKanban extends View {
         this.loaded = Date.now();
         this.offline = null;
         this.machineNote = null; // live data proves the machine is reachable
-        this.notice = null; // write errors stay until the next write, not this poll
+        this.notice = null; // notices fade at the next tick; write errors stay until the next write
         // Bodies are long; the tooltip shows 600 characters and the dialog reads `show`.
         store.set(`cache:${machine}:${board ?? ""}`, {
           at: this.loaded,
