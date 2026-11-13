@@ -5,7 +5,9 @@ lives on an always-on machine. It reads and writes the board through the
 `hermes kanban` CLI on a paired machine, so nothing is copied and nothing needs
 a browser.
 
-![Hermes Kanban](preview.png)
+![The board](screenshots/board.png)
+
+![A card](screenshots/card.png)
 
 ## What it does
 
